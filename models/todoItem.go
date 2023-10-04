@@ -5,10 +5,10 @@ import (
 )
 
 type TodoItem struct {
-	Task     string
-	Priority bool
-	InitDate string
-	DueDate  string
+	Task     string `json:"task"`
+	Priority bool   `json:"priority"`
+	InitDate string `json:"init_date"`
+	DueDate  string `json:"due_date"`
 }
 
 var formatString string = "02-01-2006"
