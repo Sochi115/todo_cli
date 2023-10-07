@@ -3,7 +3,8 @@
     {
       "task": "Throw the trash",
       "priority": true,
-      "init_date": "11-05-2000"
+      "init_date": "11-05-2000",
+      "due_date": ""
     },
     {
       "task": "Walk bella",

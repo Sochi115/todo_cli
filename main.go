@@ -9,6 +9,9 @@ import (
 
 func main() {
 	start := time.Now()
-	app.GetTodos()
+	// app.GetTodos()
+	var jsonFileName string = "resources/dummyJson.json"
+	app.GetTodos(jsonFileName)
+	app.ParseToTable(app.TodoList)
 	fmt.Println(time.Since(start))
 }
