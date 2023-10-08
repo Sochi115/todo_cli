@@ -1,16 +1,14 @@
-{
-  "todolist": [
-    {
-      "task": "Throw the trash",
-      "priority": true,
-      "init_date": "11-05-2000",
-      "due_date": ""
-    },
-    {
-      "task": "Walk bella",
-      "priority": false,
-      "init_date": "11-05-2000",
-      "due_date": "12-05-2000"
-    }
-  ]
-}
+[
+  {
+    "task": "Throw the trash",
+    "priority": true,
+    "init_date": "11-05-2000",
+    "due_date": ""
+  },
+  {
+    "task": "Walk bella",
+    "priority": false,
+    "init_date": "11-05-2000",
+    "due_date": "12-05-2000"
+  }
+]

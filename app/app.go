@@ -2,16 +2,13 @@ package app
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"os"
-
-	"github.com/Sochi115/todo_cli/models"
 )
 
 type App struct {
-	TodoList     []models.TodoItem `json:"todolist"`
+	TodoList     []TodoItem
 	JsonFileName string
 }
 
@@ -19,12 +16,9 @@ func (a *App) GetTodos() {
 	jsonFile, err := os.Open(a.JsonFileName)
 	defer jsonFile.Close()
 
-	if err != nil {
-		fmt.Println("NO TASKS")
-	} else {
+	if err == nil {
 		byteValue, _ := io.ReadAll(jsonFile)
-
-		json.Unmarshal(byteValue, &a)
+		json.Unmarshal(byteValue, &a.TodoList)
 	}
 }
 
@@ -37,11 +31,11 @@ func (a *App) AddTodos(task string) {
 	a.saveTodoListToJson()
 }
 
-// func updateJson(todoList models.TodoList) {
+// func updateJson(todoList TodoList) {
 // }
 
-func constructNewTodoItem(task string) models.TodoItem {
-	var taskItem models.TodoItem
+func constructNewTodoItem(task string) TodoItem {
+	var taskItem TodoItem
 
 	taskItem.Task = task
 	taskItem.SetInitDate()

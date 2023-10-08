@@ -11,7 +11,8 @@ func main() {
 	start := time.Now()
 	// app.GetTodos()
 	var app app.App
-	app.JsonFileName = "resources/dummyJson.json"
+	// app.JsonFileName = "resources/dummyJson.json"
+	app.JsonFileName = "dummyJson.json"
 
 	app.GetTodos()
 	app.ParseToTable()
