@@ -4,8 +4,6 @@ import (
 	"fmt"
 
 	"github.com/alexeyco/simpletable"
-
-	"github.com/Sochi115/todo_cli/models"
 )
 
 const (
@@ -17,7 +15,7 @@ const (
 	ColorGray  = "\x1b[90m"
 )
 
-func ParseToTable(todoList models.TodoList) {
+func (a *App) ParseToTable() {
 	table := simpletable.New()
 
 	table.Header = &simpletable.Header{
@@ -28,7 +26,7 @@ func ParseToTable(todoList models.TodoList) {
 		},
 	}
 
-	for idx, row := range todoList.TodoList {
+	for idx, row := range a.TodoList {
 		var prio string
 		if row.Priority {
 			prio = red("High")

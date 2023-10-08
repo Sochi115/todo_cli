@@ -10,12 +10,13 @@ import (
 	"github.com/Sochi115/todo_cli/models"
 )
 
-var TodoList models.TodoList
+type App struct {
+	TodoList     []models.TodoItem `json:"todolist"`
+	JsonFileName string
+}
 
-var jsonFileName string = "resources/dummyJson.json"
-
-func GetTodos(jsonFileName string) {
-	jsonFile, err := os.Open(jsonFileName)
+func (a *App) GetTodos() {
+	jsonFile, err := os.Open(a.JsonFileName)
 	defer jsonFile.Close()
 
 	if err != nil {
@@ -23,21 +24,21 @@ func GetTodos(jsonFileName string) {
 	} else {
 		byteValue, _ := io.ReadAll(jsonFile)
 
-		json.Unmarshal(byteValue, &TodoList)
+		json.Unmarshal(byteValue, &a)
 	}
 }
 
-func AddTodos(task string) {
+func (a *App) AddTodos(task string) {
 	taskItem := constructNewTodoItem(task)
 
-	GetTodos(jsonFileName)
+	a.GetTodos()
 
-	TodoList.TodoList = append(TodoList.TodoList, taskItem)
-	saveTodoListToJson()
+	a.TodoList = append(a.TodoList, taskItem)
+	a.saveTodoListToJson()
 }
 
-func updateJson(todoList models.TodoList) {
-}
+// func updateJson(todoList models.TodoList) {
+// }
 
 func constructNewTodoItem(task string) models.TodoItem {
 	var taskItem models.TodoItem
@@ -49,10 +50,10 @@ func constructNewTodoItem(task string) models.TodoItem {
 	return taskItem
 }
 
-func saveTodoListToJson() {
-	file, _ := json.MarshalIndent(TodoList, "", "  ")
+func (a *App) saveTodoListToJson() {
+	file, _ := json.MarshalIndent(a.TodoList, "", "  ")
 
-	err := os.WriteFile(jsonFileName, file, 0644)
+	err := os.WriteFile(a.JsonFileName, file, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
