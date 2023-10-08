@@ -4,13 +4,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Sochi115/todo_cli/models"
+	"github.com/Sochi115/todo_cli/app"
 )
 
 func TestSetInitDate(t *testing.T) {
 	expected := time.Now().Format("02-01-2006")
 
-	var taskItem models.TodoItem
+	var taskItem app.TodoItem
 
 	taskItem.SetInitDate()
 
@@ -24,7 +24,7 @@ func TestSetDueDate(t *testing.T) {
 	currDate := time.Now().AddDate(0, 0, 2)
 	expected := currDate.Format(formatString)
 
-	var taskItem models.TodoItem
+	var taskItem app.TodoItem
 
 	taskItem.SetDueDate(2)
 

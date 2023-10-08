@@ -1,21 +1,22 @@
 package test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/Sochi115/todo_cli/app"
-	"github.com/Sochi115/todo_cli/models"
 )
 
 func TestGetTodosWithFileName(t *testing.T) {
 	// Arrange
-	resetTodoList()
 	expected := generateExpectedTodoList()
-	jsonFileName := "../test_resources/dummyJson.json"
+	var a *app.App
+	a = new(app.App)
+	a.JsonFileName = "../test_resources/dummyJson.json"
 
 	// Act
-	app.GetTodos(jsonFileName)
-	result := app.TodoList.TodoList
+	a.GetTodos()
+	result := a.TodoList
 
 	// Assert
 	if len(result) == 0 {
@@ -23,8 +24,8 @@ func TestGetTodosWithFileName(t *testing.T) {
 		return
 	}
 	for i := range result {
-		if result[i] != expected.TodoList[i] {
-			t.Errorf("Got: %v     WANTED: %v", result[i], expected.TodoList[i])
+		if result[i] != expected[i] {
+			t.Errorf("Got: %v     WANTED: %v", result[i], expected[i])
 			return
 		}
 	}
@@ -32,12 +33,15 @@ func TestGetTodosWithFileName(t *testing.T) {
 
 func TestAddTodo(t *testing.T) {
 	// Arrange
-	resetTodoList()
+	var a *app.App
+	a = new(app.App)
+	a.JsonFileName = "../test_resources/dummyAddJson.json"
+
 	expected := "Test task"
 
 	// Act
-	app.AddTodos("Test task")
-	todoList := app.TodoList.TodoList
+	a.AddTodos("Test task")
+	todoList := a.TodoList
 
 	// Assert
 	if len(todoList) == 0 {
@@ -55,30 +59,27 @@ func TestAddTodo(t *testing.T) {
 		t.Errorf("Got: %v     WANTED: %v", result, expected)
 		return
 	}
+	os.Remove(a.JsonFileName)
 }
 
-func generateExpectedTodoList() models.TodoList {
-	var firstTodo models.TodoItem
+func generateExpectedTodoList() []app.TodoItem {
+	var firstTodo app.TodoItem
 
 	firstTodo.Task = "Throw the trash"
 	firstTodo.Priority = true
 	firstTodo.InitDate = "11-05-2000"
 
-	var secondTodo models.TodoItem
+	var secondTodo app.TodoItem
 
 	secondTodo.Task = "Walk bella"
 	secondTodo.Priority = false
 	secondTodo.InitDate = "11-05-2000"
 	secondTodo.DueDate = "12-05-2000"
 
-	var todoList models.TodoList
+	var todoList []app.TodoItem
 
-	todoList.TodoList = append(todoList.TodoList, firstTodo)
-	todoList.TodoList = append(todoList.TodoList, secondTodo)
+	todoList = append(todoList, firstTodo)
+	todoList = append(todoList, secondTodo)
 
 	return todoList
-}
-
-func resetTodoList() {
-	app.TodoList.TodoList = []models.TodoItem{}
 }
