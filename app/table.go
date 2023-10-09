@@ -26,7 +26,7 @@ func (a *App) ParseToTable() {
 		},
 	}
 
-	for idx, row := range a.TodoList {
+	for _, row := range a.TodoList {
 		var prio string
 		if row.Priority {
 			prio = red("High")
@@ -34,7 +34,7 @@ func (a *App) ParseToTable() {
 			prio = "Low"
 		}
 		r := []*simpletable.Cell{
-			{Align: simpletable.AlignCenter, Text: fmt.Sprintf("%d", idx)},
+			{Align: simpletable.AlignCenter, Text: fmt.Sprintf("%d", row.Id)},
 			{Text: row.Task},
 			{Align: simpletable.AlignCenter, Text: prio},
 		}
@@ -56,8 +56,4 @@ func green(s string) string {
 
 func blue(s string) string {
 	return fmt.Sprintf("%s%s%s", ColorBlue, s, ColorDefault)
-}
-
-func gray(s string) string {
-	return fmt.Sprintf("%s%s%s", ColorGray, s, ColorDefault)
 }

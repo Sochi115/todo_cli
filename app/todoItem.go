@@ -5,6 +5,7 @@ import (
 )
 
 type TodoItem struct {
+	Id       int    `json:"id"`
 	Task     string `json:"task"`
 	Priority bool   `json:"priority"`
 	InitDate string `json:"init_date"`

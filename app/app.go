@@ -23,21 +23,35 @@ func (a *App) GetTodos() {
 }
 
 func (a *App) AddTodos(task string) {
-	taskItem := constructNewTodoItem(task)
-
 	a.GetTodos()
+	newId := a.generateId()
+
+	taskItem := constructNewTodoItem(task, newId)
 
 	a.TodoList = append(a.TodoList, taskItem)
 	a.saveTodoListToJson()
 }
 
-// func updateJson(todoList TodoList) {
-// }
+func (a *App) generateId() int {
+	todoLength := len(a.TodoList)
+	if todoLength == 0 {
+		return 0
+	}
 
-func constructNewTodoItem(task string) TodoItem {
+	lastId := a.TodoList[todoLength-1].Id
+
+	if lastId >= 99 {
+		return 0
+	}
+
+	return lastId + 1
+}
+
+func constructNewTodoItem(task string, id int) TodoItem {
 	var taskItem TodoItem
 
 	taskItem.Task = task
+	taskItem.Id = id
 	taskItem.SetInitDate()
 	taskItem.Priority = true
 
