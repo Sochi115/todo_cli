@@ -62,16 +62,55 @@ func TestAddTodo(t *testing.T) {
 	os.Remove(a.JsonFileName)
 }
 
+func TestAddTodoIdReset(t *testing.T) {
+	var a *app.App
+	a = new(app.App)
+	a.JsonFileName = "../test_resources/dummyAddJson.json"
+
+	expected := 0
+
+	var initialTask app.TodoItem
+
+	initialTask.Id = 99
+	initialTask.Task = "First task"
+
+	a.TodoList = append(a.TodoList, initialTask)
+
+	// Act
+	a.AddTodos("Test task")
+	todoList := a.TodoList
+
+	// Assert
+	if len(todoList) <= 1 {
+		t.Error("Task not added")
+		return
+	}
+	if len(todoList) >= 3 {
+		t.Error("Unexpected tasks in the list")
+		t.Log(todoList)
+		return
+	}
+
+	result := todoList[1].Id
+	if result != expected {
+		t.Errorf("Got: %v     WANTED: %v", result, expected)
+		return
+	}
+	os.Remove(a.JsonFileName)
+}
+
 func generateExpectedTodoList() []app.TodoItem {
 	var firstTodo app.TodoItem
 
 	firstTodo.Task = "Throw the trash"
+	firstTodo.Id = 1
 	firstTodo.Priority = true
 	firstTodo.InitDate = "11-05-2000"
 
 	var secondTodo app.TodoItem
 
 	secondTodo.Task = "Walk bella"
+	secondTodo.Id = 19
 	secondTodo.Priority = false
 	secondTodo.InitDate = "11-05-2000"
 	secondTodo.DueDate = "12-05-2000"
