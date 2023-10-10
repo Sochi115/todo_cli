@@ -29,7 +29,33 @@ func (a *App) AddTodos(task string) {
 	taskItem := constructNewTodoItem(task, newId)
 
 	a.TodoList = append(a.TodoList, taskItem)
-	a.saveTodoListToJson()
+}
+
+func (a *App) RemoveTodoById(id int) {
+	for idx, t := range a.TodoList {
+		if t.Id == id {
+			a.TodoList = a.removeFromSlice(idx)
+			return
+		}
+	}
+}
+
+func (a *App) SaveTodoListToJson() {
+	file, _ := json.MarshalIndent(a.TodoList, "", "  ")
+
+	err := os.WriteFile(a.JsonFileName, file, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func (a *App) removeFromSlice(idx int) []TodoItem {
+	todoLength := len(a.TodoList) - 1
+
+	if idx < todoLength {
+		a.TodoList[idx] = a.TodoList[todoLength]
+	}
+	return a.TodoList[:todoLength]
 }
 
 func (a *App) generateId() int {
@@ -56,13 +82,4 @@ func constructNewTodoItem(task string, id int) TodoItem {
 	taskItem.Priority = true
 
 	return taskItem
-}
-
-func (a *App) saveTodoListToJson() {
-	file, _ := json.MarshalIndent(a.TodoList, "", "  ")
-
-	err := os.WriteFile(a.JsonFileName, file, 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
 }
