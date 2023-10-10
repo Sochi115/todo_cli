@@ -1,7 +1,6 @@
 package test
 
 import (
-	"os"
 	"testing"
 
 	"github.com/Sochi115/todo_cli/app"
@@ -35,7 +34,6 @@ func TestAddTodo(t *testing.T) {
 	// Arrange
 	var a *app.App
 	a = new(app.App)
-	a.JsonFileName = "../test_resources/dummyAddJson.json"
 
 	expected := "Test task"
 
@@ -59,13 +57,11 @@ func TestAddTodo(t *testing.T) {
 		t.Errorf("Got: %v     WANTED: %v", result, expected)
 		return
 	}
-	os.Remove(a.JsonFileName)
 }
 
 func TestAddTodoIdReset(t *testing.T) {
 	var a *app.App
 	a = new(app.App)
-	a.JsonFileName = "../test_resources/dummyAddJson.json"
 
 	expected := 0
 
@@ -96,29 +92,35 @@ func TestAddTodoIdReset(t *testing.T) {
 		t.Errorf("Got: %v     WANTED: %v", result, expected)
 		return
 	}
-	os.Remove(a.JsonFileName)
 }
 
-func generateExpectedTodoList() []app.TodoItem {
-	var firstTodo app.TodoItem
+func TestDeleteTask(t *testing.T) {
+	var a *app.App
+	a = new(app.App)
+	a.TodoList = generateExpectedTodoList()
 
-	firstTodo.Task = "Throw the trash"
-	firstTodo.Id = 1
-	firstTodo.Priority = true
-	firstTodo.InitDate = "11-05-2000"
+	a.RemoveTodoById(19)
 
-	var secondTodo app.TodoItem
+	if len(a.TodoList) != 1 {
+		t.Error("Failed to delete task 19")
+		t.Log(a.TodoList)
+	}
 
-	secondTodo.Task = "Walk bella"
-	secondTodo.Id = 19
-	secondTodo.Priority = false
-	secondTodo.InitDate = "11-05-2000"
-	secondTodo.DueDate = "12-05-2000"
+	if a.TodoList[0].Task != "Throw the trash" {
+		t.Error("Deleted the wrong task")
+		t.Log(a.TodoList)
+	}
+}
 
-	var todoList []app.TodoItem
+func TestDeleteInvalidTaskId(t *testing.T) {
+	var a *app.App
+	a = new(app.App)
+	a.TodoList = generateExpectedTodoList()
 
-	todoList = append(todoList, firstTodo)
-	todoList = append(todoList, secondTodo)
+	a.RemoveTodoById(100)
 
-	return todoList
+	if len(a.TodoList) != 2 {
+		t.Error("Task unexpectedly deleted")
+		t.Log(a.TodoList)
+	}
 }
