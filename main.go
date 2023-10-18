@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"os"
 
 	"github.com/Sochi115/todo_cli/app"
@@ -11,6 +10,8 @@ import (
 var appInstance app.App
 
 func main() {
+	appInstance.JsonFileName = "resources/dummyJson.json"
+	appInstance.GetTodos()
 	if len(os.Args) < 2 {
 		printTable()
 	} else {
@@ -19,30 +20,41 @@ func main() {
 }
 
 func handleArgs() {
+	switch os.Args[1] {
+	case "add":
+		handleAdd(os.Args[2:])
+	case "delete":
+		handleDeleteCommand(os.Args[2:])
+	default:
+		printTable()
+	}
+	saveChanges()
+}
+
+func handleAdd(args []string) {
 	addCmd := flag.NewFlagSet("add", flag.ExitOnError)
 	addTaskName := addCmd.String("task", "", "Adds task")
 	addIsHigh := addCmd.Bool("isHigh", false, "Sets priority of the task")
 
+	addCmd.Parse(args)
+
+	appInstance.AddTodos(*addTaskName, *addIsHigh)
+	printTable()
+}
+
+func handleDeleteCommand(args []string) {
 	deleteCmd := flag.NewFlagSet("delete", flag.ExitOnError)
 	deleteId := deleteCmd.Int("id", -1, "Deletes task by id")
+	deleteCmd.Parse(args)
 
-	switch os.Args[1] {
-	case "add":
-		addCmd.Parse(os.Args[2:])
-		fmt.Println("Task: ", *addTaskName)
-		fmt.Println("Is High Prio: ", *addIsHigh)
+	appInstance.RemoveTodoById(*deleteId)
+	printTable()
+}
 
-	case "delete":
-		deleteCmd.Parse(os.Args[2:])
-		fmt.Println("ID: ", *deleteId)
-
-	default:
-		printTable()
-	}
+func saveChanges() {
+	appInstance.SaveTodoListToJson()
 }
 
 func printTable() {
-	appInstance.JsonFileName = "resources/dummyJson.json"
-	appInstance.GetTodos()
 	appInstance.ParseToTable()
 }

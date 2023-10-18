@@ -22,11 +22,8 @@ func (a *App) GetTodos() {
 	}
 }
 
-func (a *App) AddTodos(task string) {
-	a.GetTodos()
-	newId := a.generateId()
-
-	taskItem := constructNewTodoItem(task, newId)
+func (a *App) AddTodos(task string, prio bool) {
+	taskItem := a.constructNewTodoItem(task, prio)
 
 	a.TodoList = append(a.TodoList, taskItem)
 }
@@ -73,13 +70,13 @@ func (a *App) generateId() int {
 	return lastId + 1
 }
 
-func constructNewTodoItem(task string, id int) TodoItem {
+func (a *App) constructNewTodoItem(task string, prio bool) TodoItem {
 	var taskItem TodoItem
 
 	taskItem.Task = task
-	taskItem.Id = id
+	taskItem.Id = a.generateId()
 	taskItem.SetInitDate()
-	taskItem.Priority = true
+	taskItem.Priority = prio
 
 	return taskItem
 }
