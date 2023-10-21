@@ -2,6 +2,7 @@ package app
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -46,6 +47,21 @@ func (a *App) SaveTodoListToJson() {
 	}
 }
 
+func (a *App) ExportAsFile(filename string) {
+	file, _ := json.MarshalIndent(a.TodoList, "", "  ")
+
+	if filename == "" {
+		filename = "todo.json"
+	}
+	filename = ".\\" + filename
+
+	fmt.Println("Writing to file:", filename)
+	err := os.WriteFile(filename, file, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func (a *App) removeFromSlice(idx int) []TodoItem {
 	todoLength := len(a.TodoList) - 1
 
@@ -75,7 +91,6 @@ func (a *App) constructNewTodoItem(task string, prio bool) TodoItem {
 
 	taskItem.Task = task
 	taskItem.Id = a.generateId()
-	taskItem.SetInitDate()
 	taskItem.Priority = prio
 
 	return taskItem

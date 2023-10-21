@@ -10,7 +10,7 @@ import (
 var appInstance app.App
 
 func main() {
-	appInstance.JsonFileName = "resources/dummyJson.json"
+	appInstance.JsonFileName = "todoJson.json"
 	appInstance.GetTodos()
 	if len(os.Args) < 2 {
 		printTable()
@@ -25,6 +25,8 @@ func handleArgs() {
 		handleAdd(os.Args[2:])
 	case "delete":
 		handleDeleteCommand(os.Args[2:])
+	case "export":
+		handleExportCommand(os.Args[2:])
 	default:
 		printTable()
 	}
@@ -49,6 +51,14 @@ func handleDeleteCommand(args []string) {
 
 	appInstance.RemoveTodoById(*deleteId)
 	printTable()
+}
+
+func handleExportCommand(args []string) {
+	exportCmd := flag.NewFlagSet("export", flag.ExitOnError)
+	filename := exportCmd.String("filename", "", "Relative path to file")
+	exportCmd.Parse(args)
+
+	appInstance.ExportAsFile(*filename)
 }
 
 func saveChanges() {

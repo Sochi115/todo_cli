@@ -38,7 +38,7 @@ func TestAddTodo(t *testing.T) {
 	expected := "Test task"
 
 	// Act
-	a.AddTodos("Test task")
+	a.AddTodos("Test task", false)
 	todoList := a.TodoList
 
 	// Assert
@@ -73,7 +73,7 @@ func TestAddTodoIdReset(t *testing.T) {
 	a.TodoList = append(a.TodoList, initialTask)
 
 	// Act
-	a.AddTodos("Test task")
+	a.AddTodos("Test task", false)
 	todoList := a.TodoList
 
 	// Assert
